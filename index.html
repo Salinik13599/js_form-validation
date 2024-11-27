@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: goldenrod;
+            color: white;
+            text-align: center;
+        }
+        .form-container {
+            background-color: white;
+            color: rgb(0, 0, 0);
+            width: 300px;
+            margin: 50px auto;
+            padding: 50px;
+            border-radius: 10px;
+        }
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid gray;
+            border-radius: 5px;
+        }
+        input.error-border, textarea.error-border {
+            border-color: red;
+        }
+        input.valid-border, textarea.valid-border {
+            border-color: green;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Registration Form</h1>
+
+    <div class="form-container">
+        <form id="registrationForm">
+            <input type="text" id="name" placeholder="Please Enter Your Name">
+            <span id="nameError" class="error"></span>
+            <input type="email" id="email" placeholder="Please Enter Your Email">
+            <span id="emailError" class="error"></span>
+            <input type="text" id="phone" placeholder="Please Enter Your Phone">
+            <span id="phoneError" class="error"></span>
+            <input type="text" id="subject" placeholder="Please Enter Your Subject">
+            <span id="subjectError" class="error"></span>
+            <textarea id="message" placeholder="Please Enter Your Message"></textarea>
+            <span id="messageError" class="error"></span>
+
+            
+            <input type="password" id="password" placeholder="Enter Your Password">
+            <span id="passwordError" class="error"></span>
+            <input type="password" id="confirmPassword" placeholder="Confirm Your Password">
+            <span id="confirmPasswordError" class="error"></span>
+
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById("registrationForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            clearErrors();
+            let isValid = true;
+
+            
+            const name = document.getElementById("name");
+            if (name.value === "") {
+                isValid = false;
+                displayError(name, "nameError", "Name is required");
+            }
+
+            
+            const email = document.getElementById("email");
+            const emailPattern = /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
+            if (!emailPattern.test(email.value)) {
+                isValid = false;
+                displayError(email, "emailError", "Please enter a valid email address");
+            }
+
+            
+            const phone = document.getElementById("phone");
+            const phonePattern = /^\d{10}$/;
+            if (!phonePattern.test(phone.value)) {
+                isValid = false;
+                displayError(phone, "phoneError", "Please enter a valid 10-digit phone number"); 
+            }
+
+            
+            const subject = document.getElementById("subject");
+            if (subject.value === "") {
+                isValid = false;
+                displayError(subject, "subjectError", "Subject is required");
+            }
+
+           
+            const message = document.getElementById("message");
+            if (message.value === "") {
+                isValid = false;
+                displayError(message, "messageError", "Message is required");
+            }
+
+            
+            const password = document.getElementById("password").value;
+            const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*])[A-Za-z\d!@#$%^&*]{10,}$/;
+            if (!passwordPattern.test(password)) {
+                isValid = false;
+                displayError(document.getElementById("password"), "passwordError", "Password must be at least 10 characters, start with a capital letter, contain one number and one special character");
+            }
+
+            
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            if (confirmPassword !== password) {
+                isValid = false;
+                displayError(document.getElementById("confirmPassword"), "confirmPasswordError", "Passwords do not match");
+            }
+
+            if (isValid) {
+                alert("Form submitted successfully!");
+            }
+        });
+
+        function displayError(element, errorId, message) {
+            document.getElementById(errorId).textContent = message;
+            element.classList.add("error-border");
+        }
+
+        function clearErrors() {
+            document.getElementById("nameError").textContent = "";
+            document.getElementById("emailError").textContent = "";
+            document.getElementById("phoneError").textContent = "";
+            document.getElementById("subjectError").textContent = "";
+            document.getElementById("messageError").textContent = "";
+            document.getElementById("passwordError").textContent = "";
+            document.getElementById("confirmPasswordError").textContent = "";
+
+            const inputs = document.querySelectorAll("input, textarea");
+            inputs.forEach(input => {
+                input.classList.remove("error-border");
+                input.classList.remove("valid-border");
+            });
+        }
+
+        const inputs = document.querySelectorAll("input, textarea");
+
+        inputs.forEach(input => {
+            input.addEventListener("input", function() {
+                if (input.value !== "") {
+                    input.classList.remove("error-border");
+                    input.classList.add("valid-border");
+                    const errorId = input.id + "Error";
+                    document.getElementById(errorId).textContent = "";
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
